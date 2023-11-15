@@ -35,6 +35,7 @@ public:
 public:
 	int m_id;
 
+	ServerHandler* serverHandler;
 private:
 	float m_speed = 50;
 
@@ -47,8 +48,6 @@ private:
 	float		m_BarrelRotation;
 
 	RenderMode	m_RenderMode = RenderMode::REAL_AND_PREDICTED;
-
-	ServerHandler* serverHandler;
 
 	std::vector<TankMessage> m_Messages;
 };

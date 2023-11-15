@@ -7,3 +7,12 @@
 *.vsidx
 Client/.vs/Client/FileContentIndex/d421251b-a738-4de2-8833-21a518d63e89.vsidx
 *.opendb
+*.db
+Client/.vs/Client/v17/.suo
+*.ipch
+*.ipch
+*.tlog
+*.ilk
+*.log
+*.obj
+*.idb

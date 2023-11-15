@@ -70,6 +70,14 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 
 	packet >> data;
 
+	if (data._Equal("Welcome")) {
+		int id;
+
+		packet >> id;
+
+		tanks[0]->m_id = id;
+	}
+
 	if (data._Equal("PlayerJoined")) {
 		Tank* tank = new Tank("blue", nullptr);
 

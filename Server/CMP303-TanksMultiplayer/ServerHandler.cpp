@@ -55,6 +55,12 @@ void ServerHandler::handleConnections() {
 
 			tanks.push_back(tank);
 
+			sf::Packet welcomePacket;
+			welcomePacket << "Welcome";
+			welcomePacket << client->id;
+
+			sendDataTCP(*client->tcpSocket, welcomePacket);
+
 			//No need to notify others.. if there aren't any
 			if (clients.size() > 1) {
 				sf::Packet packet;

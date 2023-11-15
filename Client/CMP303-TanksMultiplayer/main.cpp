@@ -54,9 +54,13 @@ int main() {
 
 	float timer = 0.0f;
 
+	tanks.push_back(new Tank("red", nullptr));
+
 	//Connect to server
 	serverHandler = new ServerHandler(tanks, ADDRESS, PORT);
 	serverHandler->connect();
+
+	tanks[0]->serverHandler = serverHandler;
 
 	/*sf::TcpSocket tcpSocket;
 	sf::UdpSocket udpSocket;
@@ -121,8 +125,6 @@ int main() {
 
 	std::cout << "Received " << UDPPakcet.getDataSize() << " bytes from UDP server: " << UDPDDATA << std::endl;*/
 	
-	tanks.push_back(new Tank("red", serverHandler));
-
 	while (window.isOpen()) {
 		//Get the time since the last frame in milliseconds
   		float dt = clock.restart().asSeconds() * gameSpeed;
@@ -160,7 +162,7 @@ int main() {
 		}
 		
 		if(tanks.size() > 1)
-			debugText.setString( "Game Time: " + Stringify( timer ) + " - ID; " + Stringify(tanks[1]->m_id));
+			debugText.setString( "Game Time: " + Stringify( timer ) + " - IDs; " + Stringify(tanks[0]->m_id) + " / " + Stringify(tanks[1]->m_id));
 
 		//Render the scene
 		window.clear();
