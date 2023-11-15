@@ -95,6 +95,10 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 		std::cout << "New player joined! " << tank->m_id << std::endl;
 	}
 
+	if (data._Equal("IsReady")) {
+		packet >> tanks[0]->m_isReady;
+	}
+
 	if (data._Equal("GameStarted")) {
 		int countdown = 0;
 
@@ -102,8 +106,6 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 
 		std::cout << "AYOOO STARTED; " << countdown << std::endl;
 	}
-
-	//std::cout << "well?" << data << std::endl;
 }
 
 void ServerHandler::handleUDPData(sf::Packet packet) {
@@ -111,29 +113,17 @@ void ServerHandler::handleUDPData(sf::Packet packet) {
 
 	packet >> data;
 
-	//std::cout << "yooo; " << data << std::endl;
-
 	if (data._Equal("PlayerMoved")) {
 		float x, y;
 		int id;
 
 		packet >> x >> y;
 		packet >> id;
-
-		//TODO; make server(onjoin) send client id to use it here as well.
-		//std::cout << "Size; " << tanks.size() << std::endl;
 		
-		std::cout << id << " has moved\n";
-
 		Tank* tank = getTank(id);
 
 		if (tank != nullptr)
 			tank->setPosition(x, y);
-		//else
-		//	std::cout << "Null :(\n";
-
-		//if(tanks.size() > 1)
-			//tanks[1]->setPosition(x, y);
 	}
 }
 

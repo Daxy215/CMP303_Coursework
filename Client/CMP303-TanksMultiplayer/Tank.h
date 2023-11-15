@@ -35,6 +35,8 @@ public:
 public:
 	int m_id;
 
+	bool m_isReady;
+
 	ServerHandler* serverHandler;
 private:
 	float m_speed = 50;

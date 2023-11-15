@@ -75,6 +75,7 @@ void Tank::addPosition(float x, float y) {
 	position.x += x;
 	position.y += y;
 
+	m_BarrelSprite.setPosition(position.x, position.y);
 	setPosition(position.x, position.y);
 }
 

@@ -176,7 +176,23 @@ void ServerHandler::handleTCPData(sf::Packet packet, Client& client) {
 	}
 	
 	if (data._Equal("Ready")) {
-		client.player->isReady = true;
+		int id;
+
+		packet >> id;
+
+		//Extra security
+		if (client.id != id) {
+			return;
+		}
+
+		client.player->isReady = !client.player->isReady;
+
+		sf::Packet isReadyPacket;
+
+		isReadyPacket << "IsReady";
+		isReadyPacket << client.player->isReady;
+
+		sendDataTCP(*client.tcpSocket, isReadyPacket);
 
 		handleGameLogic();
 	}
@@ -210,7 +226,6 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 		playerMovedPacket << x << y;
 		playerMovedPacket << client.id;
 
-		//sendDataUDP(client, playerMovedPacket);
 		sendDataUDPToAllClientsExpect(playerMovedPacket, client.id);
 	}
 }
@@ -255,8 +270,6 @@ void ServerHandler::sendDataTCP(sf::TcpSocket& tcpSocket, sf::Packet packet) {
 		if (status != sf::Socket::Done) {
 			std::cout << "ERROR: Failed to send data to client!" << std::endl;
 		}
-
-		std::cout << "SEND joining thingy\n";
 	}
 }
 
@@ -305,15 +318,13 @@ void ServerHandler::sendDataUDPToAllClientsExpect(sf::Packet packet, int id) {
 }
 
 void ServerHandler::sendDataUDP(Client& client, sf::Packet packet) {
-	//if (selector.isReady(*udpSocket)) {
-		sf::Socket::Status status = (*udpSocket).send(packet, client.address, client.port);
+	sf::Socket::Status status = (*udpSocket).send(packet, client.address, client.port);
 
-		if (status != sf::Socket::Done) {
-			std::cout << "ERROR: Failed to send data to client!" << std::endl;
-		}
+	if (status != sf::Socket::Done) {
+		std::cout << "ERROR: Failed to send data to client!" << std::endl;
+	}
 
-		std::cout << "Sent; " << status << " - " << client.port << std::endl;
-	//}
+	//std::cout << "Sent; " << status << " - " << client.port << std::endl;
 }
 
 Packet ServerHandler::recieveDataUDP(Client& client) {

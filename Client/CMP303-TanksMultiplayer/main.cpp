@@ -155,6 +155,7 @@ int main() {
 					sf::Packet packet;
 
 					packet << "Ready";
+					packet << tanks[0]->m_id;
 
 					serverHandler->sendDataTCP(serverHandler->tcpSocket, packet);
 				}
