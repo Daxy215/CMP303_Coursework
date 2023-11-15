@@ -231,6 +231,9 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 }
 
 void ServerHandler::disconnectClient(Client* client) {
+	
+
+
 	selector.remove((*client->tcpSocket));
 
 	client->tcpSocket->disconnect();

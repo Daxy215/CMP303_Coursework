@@ -1,10 +1,2 @@
-﻿  ServerHandler.cpp
-  Tank.cpp
-C:\Users\smsmk\OneDrive\Desktop\University\Abertay\Year_3\Semester_1\CMP303 - Networking\Coursework\CMP303_Coursework\Client\CMP303-TanksMultiplayer\Tank.cpp(13,64): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\smsmk\OneDrive\Desktop\University\Abertay\Year_3\Semester_1\CMP303 - Networking\Coursework\CMP303_Coursework\Client\CMP303-TanksMultiplayer\Tank.cpp(13,35): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\smsmk\OneDrive\Desktop\University\Abertay\Year_3\Semester_1\CMP303 - Networking\Coursework\CMP303_Coursework\Client\CMP303-TanksMultiplayer\Tank.cpp(17,78): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\smsmk\OneDrive\Desktop\University\Abertay\Year_3\Semester_1\CMP303 - Networking\Coursework\CMP303_Coursework\Client\CMP303-TanksMultiplayer\Tank.cpp(17,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\smsmk\OneDrive\Desktop\University\Abertay\Year_3\Semester_1\CMP303 - Networking\Coursework\CMP303_Coursework\Client\CMP303-TanksMultiplayer\Tank.cpp(109,35): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\smsmk\OneDrive\Desktop\University\Abertay\Year_3\Semester_1\CMP303 - Networking\Coursework\CMP303_Coursework\Client\CMP303-TanksMultiplayer\Tank.cpp(109,18): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
-  Generating Code...
+﻿  main.cpp
   CMP303-TanksMultiplayer.vcxproj -> C:\Users\smsmk\OneDrive\Desktop\University\Abertay\Year_3\Semester_1\CMP303 - Networking\Coursework\CMP303_Coursework\Client\x64\Debug\CMP303-TanksMultiplayer.exe

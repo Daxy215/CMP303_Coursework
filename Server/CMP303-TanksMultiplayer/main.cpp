@@ -158,7 +158,14 @@ int main() {
 		//	serverHandlr->sendDataTCPToAllClients(packet);
 		//}
 		
-		debugText.setString( "Game Time: " + Stringify( timer ));
+		std::string ids = "\n";
+
+		for (auto& client : serverHandlr->clients) {
+			ids += std::to_string(client->id);
+			ids += "\n";
+		}
+
+		debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
 
 		//Render the scene
 		window.clear();

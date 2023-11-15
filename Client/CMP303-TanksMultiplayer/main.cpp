@@ -162,8 +162,14 @@ int main() {
 			}
 		}
 		
-		if(tanks.size() > 1)
-			debugText.setString( "Game Time: " + Stringify( timer ) + " - IDs; " + Stringify(tanks[0]->m_id) + " / " + Stringify(tanks[1]->m_id));
+		std::string ids = "\n";
+
+		for (auto& tank : tanks) {
+			ids += std::to_string(tank->m_id);
+			ids += "\n";
+		}
+
+		debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
 
 		//Render the scene
 		window.clear();
