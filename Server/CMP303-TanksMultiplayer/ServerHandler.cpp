@@ -55,8 +55,6 @@ void ServerHandler::handleConnections() {
 
 			tanks.push_back(tank);
 
-			//TODO; Send player location on joining
-
 			//No need to notify others.. if there aren't any
 			if (clients.size() > 1) {
 				sf::Packet packet;
@@ -159,11 +157,16 @@ void ServerHandler::handleTCPData(sf::Packet packet, Client& client) {
 		std::string address;
 		unsigned short port;
 
+		float x, y;
+
 		packet >> address;
 		packet >> port;
+		packet >> x >> y;
 
 		client.address = address;
 		client.port = port;
+		client.player->x = x;
+		client.player->y = y;
 	}
 	
 	if (data._Equal("Ready")) {

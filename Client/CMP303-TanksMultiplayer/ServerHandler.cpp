@@ -29,6 +29,7 @@ void ServerHandler::connect() {
 	data << "Joined";
 	data << serverAddress.toString();
 	data << udpSocket.getLocalPort();
+	data << tanks[0]->getPosition().x << tanks[0]->getPosition().y;
 
 	sendDataTCP(tcpSocket, data);
 
