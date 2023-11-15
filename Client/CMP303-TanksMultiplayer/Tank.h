@@ -26,11 +26,14 @@ public:
 	sf::Vector2f RunPrediction(float gameTime);
 
 	void SetRenderMode(const RenderMode renderMode) { m_RenderMode = renderMode; }
-	void setPosition(float x, float y);
+	//void setPosition(float x, float y);
 	void addPosition(float x, float y);
 
 	void setGhostPosition(sf::Vector2f pos);
 	void Reset();
+
+public:
+	int m_id;
 
 private:
 	float m_speed = 50;

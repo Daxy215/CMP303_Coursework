@@ -34,10 +34,10 @@ void Tank::Update(float dt)
 	setPosition( latestMessage.x, latestMessage.y );
 }
 
-void Tank::setPosition( float x, float y ) {
+/*void Tank::setPosition(float x, float y) {
 	sf::Sprite::setPosition(x, y);
 	m_BarrelSprite.setPosition(getPosition());
-}
+}*/
 
 //Use this to set the prediction position
 void Tank::setGhostPosition( sf::Vector2f pos ) {

@@ -11,6 +11,8 @@
 #define ADDRESS "localhost"
 #define PORT 54000
 
+bool isFocused = true;
+
 ServerHandler* serverHandler;
 std::vector<Tank*> tanks;
 
@@ -131,9 +133,15 @@ int main() {
 
 		sf::Event event;
 		while (window.pollEvent(event))	{
+			if (event.type == sf::Event::GainedFocus)
+				isFocused = true;
+
+			if (event.type == sf::Event::LostFocus)
+				isFocused = false;
+
 			if (event.type == sf::Event::Closed)
 				window.close();
-			if (event.type == sf::Event::KeyPressed) {
+			if (event.type == sf::Event::KeyPressed && isFocused) {
 				//Update player input
 				tanks[0]->UpdateInput(dt, event.key.code);
 
@@ -151,7 +159,8 @@ int main() {
 			}
 		}
 		
-		debugText.setString( "Game Time: " + Stringify( timer ));
+		if(tanks.size() > 1)
+			debugText.setString( "Game Time: " + Stringify( timer ) + " - ID; " + Stringify(tanks[1]->m_id));
 
 		//Render the scene
 		window.clear();

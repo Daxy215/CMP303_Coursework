@@ -23,6 +23,9 @@ public:
 	sf::Packet recieveDataUDP(sf::UdpSocket& udpSocket);
 
 public:
+	Tank* getTank(int id);
+
+public:
 	sf::IpAddress serverAddress;
 	unsigned short port;
 

@@ -70,16 +70,20 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 	packet >> data;
 
 	if (data._Equal("PlayerJoined")) {
-		std::cout << "New player joined!" << std::endl;
-
 		Tank* tank = new Tank("blue", nullptr);
 
 		float x, y;
+		int id;
+
 		packet >> x >> y;
+		packet >> id;
 
 		tank->setPosition(x, y);
+		tank->m_id = id;
 
 		tanks.push_back(tank);
+
+		std::cout << "New player joined! " << tank->m_id << std::endl;
 	}
 
 	if (data._Equal("GameStarted")) {
@@ -90,7 +94,7 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 		std::cout << "AYOOO STARTED; " << countdown << std::endl;
 	}
 
-	std::cout << data << std::endl;
+	//std::cout << "well?" << data << std::endl;
 }
 
 void ServerHandler::handleUDPData(sf::Packet packet) {
@@ -98,18 +102,29 @@ void ServerHandler::handleUDPData(sf::Packet packet) {
 
 	packet >> data;
 
-	std::cout << "yooo; " << data << std::endl;
+	//std::cout << "yooo; " << data << std::endl;
 
 	if (data._Equal("PlayerMoved")) {
 		float x, y;
+		int id;
 
 		packet >> x >> y;
+		packet >> id;
 
 		//TODO; make server(onjoin) send client id to use it here as well.
-		std::cout << "Size; " << tanks.size() << std::endl;
+		//std::cout << "Size; " << tanks.size() << std::endl;
 		
-		if(tanks.size() > 1)
-			tanks[1]->setPosition(x, y);
+		std::cout << id << " has moved\n";
+
+		Tank* tank = getTank(id);
+
+		if (tank != nullptr)
+			tank->setPosition(x, y);
+		//else
+		//	std::cout << "Null :(\n";
+
+		//if(tanks.size() > 1)
+			//tanks[1]->setPosition(x, y);
 	}
 }
 
@@ -163,12 +178,18 @@ sf::Packet ServerHandler::recieveDataUDP(sf::UdpSocket& udpSocket) {
 			return packet;
 		}
 
-		std::cout << "Recieved from; " << serverAddress << " - " << port << std::endl;
+		//std::cout << "Recieved from; " << serverAddress << " - " << port << std::endl;
 
 		return packet;
 	}
 
-	std::cout << "NO" << std::endl;
-
 	return packet;
+}
+
+Tank* ServerHandler::getTank(int id) {
+	for (auto& tank : tanks)
+		if (tank->m_id == id)
+			return tank;
+
+	return nullptr;
 }

@@ -61,12 +61,12 @@ void Tank::UpdateInput(float dt, sf::Keyboard::Key eventType) {
 	packet << "Moved";
 	packet << getPosition().x << getPosition().y;
 
-	//serverHandler->sendDataUDP(serverHandler->udpSocket, packet);
+	serverHandler->sendDataUDP(serverHandler->udpSocket, packet);
 }
 
-void Tank::setPosition(float x, float y) {
+/*void Tank::setPosition(float x, float y) {
 	
-}
+}*/
 
 void Tank::addPosition(float x, float y) {
 	sf::Vector2f position = getPosition();
@@ -102,6 +102,7 @@ void Tank::AddMessage(const TankMessage & msg) {
 sf::Vector2f Tank::RunPrediction(float gameTime) {
 	float predictedX = -1.0f;
 	float predictedY = -1.0f;
+
 
 	const int msize = m_Messages.size();
 	if( msize < 3 ) {

@@ -43,7 +43,6 @@ void ServerHandler::handleConnections() {
 			sf::TcpSocket* tcpSocket = handleTCP();
 
 			tcpSocket->setBlocking(false);
-
 			selector.add(*tcpSocket);
 
 			Client* client = new Client(distribution(gen), new Player(), tcpSocket);
@@ -64,6 +63,7 @@ void ServerHandler::handleConnections() {
 
 				packet << "PlayerJoined";
 				packet << client->player->x << client->player->y;
+				packet << client->id;
 
 				//Send to all other players that this new client has joined
 				sendDataTCPToAllClientsExpect(packet, client->id);
@@ -73,12 +73,11 @@ void ServerHandler::handleConnections() {
 					if (nclient->id == client->id)
 						continue;
 
-					std::cout << "sending to; " << client->id << std::endl;
-
 					sf::Packet joinedPacket;
 
 					joinedPacket << "PlayerJoined";
 					joinedPacket << nclient->player->x << nclient->player->y;
+					joinedPacket << nclient->id;
 					
 					sendDataTCP(*client->tcpSocket, joinedPacket);
 				}
@@ -115,8 +114,6 @@ void ServerHandler::handleConnections() {
 
 sf::TcpSocket* ServerHandler::handleTCP() {
 	sf::TcpSocket* client = new sf::TcpSocket;
-
-	clients.emplace_back
 
 	if (listener.accept(*client) != sf::Socket::Done) {
 		delete client;
@@ -195,6 +192,7 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 
 		playerMovedPacket << "PlayerMoved";
 		playerMovedPacket << x << y;
+		playerMovedPacket << client.id;
 
 		//sendDataUDP(client, playerMovedPacket);
 		sendDataUDPToAllClientsExpect(playerMovedPacket, client.id);
