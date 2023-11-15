@@ -16,3 +16,5 @@ Client/.vs/Client/v17/.suo
 *.log
 *.obj
 *.idb
+*.tlog
+*.ilk

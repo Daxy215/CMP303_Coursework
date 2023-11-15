@@ -59,6 +59,7 @@ void Tank::UpdateInput(float dt, sf::Keyboard::Key eventType) {
 
 	sf::Packet packet;
 	packet << "Moved";
+	packet << m_id;
 	packet << getPosition().x << getPosition().y;
 
 	serverHandler->sendDataUDP(serverHandler->udpSocket, packet);

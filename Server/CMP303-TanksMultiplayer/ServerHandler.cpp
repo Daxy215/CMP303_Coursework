@@ -188,9 +188,16 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 	packet >> data;
 
 	if (data._Equal("Moved")) {
+		int id;
 		float x, y;
 
+		packet >> id;
 		packet >> x >> y;
+
+		if (client.id != id) {
+			return;
+		}
+
 		client.player->x = x;
 		client.player->y = y;
 
