@@ -28,6 +28,7 @@ public:
 	void SetRenderMode(const RenderMode renderMode) { m_RenderMode = renderMode; }
 	//void setPosition(float x, float y);
 	void addPosition(float x, float y);
+	void addRotation(float angle);
 
 	void setGhostPosition(sf::Vector2f pos);
 	void Reset();
@@ -38,10 +39,11 @@ public:
 	bool m_isReady;
 
 	ServerHandler* serverHandler;
+
+	sf::Sprite	m_BarrelSprite;
 private:
 	float m_speed = 50;
 
-	sf::Sprite	m_BarrelSprite;
 	sf::Sprite	m_GhostSprite;
 
 	sf::Texture m_BodyTexture;

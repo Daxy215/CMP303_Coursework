@@ -43,31 +43,38 @@ void Tank::UpdateInput(float dt, sf::Keyboard::Key eventType) {
 
 	if (eventType == sf::Keyboard::Key::W || eventType == sf::Keyboard::Key::Up) {
 		addPosition(0, -(m_speed * dt));
+
+		setRotation(180);
+		m_BarrelSprite.setRotation(180);
 	}
 
 	if (eventType == sf::Keyboard::Key::S || eventType == sf::Keyboard::Key::Down) {
 		addPosition(0, (m_speed * dt));
+
+		setRotation(0);
+		m_BarrelSprite.setRotation(0);
 	}
 	
 	if (eventType == sf::Keyboard::Key::A || eventType == sf::Keyboard::Key::Left) {
 		addPosition(-(m_speed * dt), 0);
+
+		setRotation(90);
+		m_BarrelSprite.setRotation(90);
 	}
 
 	if (eventType == sf::Keyboard::Key::D || eventType == sf::Keyboard::Key::Right) {
 		addPosition((m_speed * dt), 0);
+
+		setRotation(-90);
+		m_BarrelSprite.setRotation(-90);
 	}
 
 	sf::Packet packet;
 	packet << "Moved";
-	packet << m_id;
-	packet << getPosition().x << getPosition().y;
+	packet << m_id << getPosition().x << getPosition().y << getRotation();
 
 	serverHandler->sendDataUDP(serverHandler->udpSocket, packet);
 }
-
-/*void Tank::setPosition(float x, float y) {
-	
-}*/
 
 void Tank::addPosition(float x, float y) {
 	sf::Vector2f position = getPosition();
@@ -77,6 +84,11 @@ void Tank::addPosition(float x, float y) {
 
 	m_BarrelSprite.setPosition(position.x, position.y);
 	setPosition(position.x, position.y);
+}
+
+void Tank::addRotation(float angle) {
+	setRotation(getRotation() + angle);
+	m_BarrelSprite.setRotation(m_BarrelRotation + angle);
 }
 
 //Use this to set the prediction position

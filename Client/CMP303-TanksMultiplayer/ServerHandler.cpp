@@ -114,16 +114,19 @@ void ServerHandler::handleUDPData(sf::Packet packet) {
 	packet >> data;
 
 	if (data._Equal("PlayerMoved")) {
-		float x, y;
+		float x, y, r;
 		int id;
 
-		packet >> x >> y;
+		packet >> x >> y >> r;
 		packet >> id;
 		
 		Tank* tank = getTank(id);
 
-		if (tank != nullptr)
+		if (tank != nullptr) {
 			tank->setPosition(x, y);
+			tank->setRotation(r);
+			tank->m_BarrelSprite.setRotation(r);
+		}
 	}
 }
 

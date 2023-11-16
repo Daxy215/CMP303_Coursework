@@ -62,69 +62,6 @@ int main() {
 
 	tanks[0]->serverHandler = serverHandler;
 
-	/*sf::TcpSocket tcpSocket;
-	sf::UdpSocket udpSocket;
-
-	sf::Socket::Status status = tcpSocket.connect(ADDRESS, PORT);
-	if (status != sf::Socket::Done)
-	{
-		// error...
-		std::cout << "Error" << std::endl;
-	}
-
-	//Send data to server
-	sf::Packet packet;
-
-	packet << "AYOOO I HAVE JOINED";
-
-	// TCP socket:
-	if (tcpSocket.send(packet) != sf::Socket::Done)
-	{
-		// error...
-	}
-
-	std::cout << "data sent to server" << std::endl;
-	
-	//Recieve data from server
-	std::string d;
-	sf::Packet pacekt;
-
-	// TCP socket:
-	if (tcpSocket.receive(packet) != sf::Socket::Done)
-	{
-		// error...
-		std::cout << "Error in recieving.." << std::endl;
-	}
-
-	packet >> d;
-
-	std::cout << "Received " << packet.getDataSize() << " bytes" << d << std::endl;
-
-	std::cout << "UDP Connection\n";
-
-	char ud[] = "AYOOO I HAVE JOINED FROM UDP";
-
-	if (udpSocket.send(ud, sizeof(ud), ADDRESS, PORT) != sf::Socket::Done) {
-		std::cout << "Error sending data to UDP server" << std::endl;
-	}
-
-	std::cout << "Data sent to UDP server" << std::endl;
-
-	char UDPDDATA[128];
-	sf::Packet UDPPakcet;
-
-	//Recieve data from server
-	sf::IpAddress serverAddress = ADDRESS;
-	unsigned short serverPort = PORT;
-
-	if (udpSocket.receive(UDPPakcet, serverAddress, serverPort) != sf::Socket::Done) {
-		std::cout << "Error receiving data from UDP server" << std::endl;
-	}
-
-	UDPPakcet >> UDPDDATA;
-
-	std::cout << "Received " << UDPPakcet.getDataSize() << " bytes from UDP server: " << UDPDDATA << std::endl;*/
-	
 	while (window.isOpen()) {
 		//Get the time since the last frame in milliseconds
   		float dt = clock.restart().asSeconds() * gameSpeed;

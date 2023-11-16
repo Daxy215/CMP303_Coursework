@@ -57,84 +57,11 @@ int main() {
 	serverHandlr = new ServerHandler(tanks, ADDRESS, PORT);
 	serverHandlr->connect();
 
-	/*sf::TcpListener listener;
-
-	// bind the listener to a port
-	if (listener.listen(PORT) != sf::Socket::Done)
-	{
-		// error...
-		std::cout << "ff" << std::endl;
-	}
-
-	// accept a new connection
-	sf::TcpSocket client;
-	if (listener.accept(client) != sf::Socket::Done)
-	{
-		// error...
-		std::cout << "ff2" << std::endl;
-	}
-
-	//Create and bind UDP Socket
-	sf::UdpSocket udpSocket;
-
-	//Bind socket to port
-	if (udpSocket.bind(PORT) != sf::Socket::Done) {
-		std::cout << "Error binding UDP socket" << std::endl;
-	}
-
-	std::cout << "New Client connected to server." << std::endl;
-
-	char data[] = "Welcome to the server bla bla";
-
-	if (client.send(data, 128) != sf::Socket::Done) {
-		std::cout << "Sending error" << std::endl;
-	}
-
-	std::cout << "Data has been sent\n";
-
-	char d[30];
-
-	sf::Packet packet;
-	if (client.receive(packet) != sf::Socket::Done) {
-		std::cout << "Error receiving\n";
-	}
-
-	packet >> d;
-
-	std::cout << "Received: " << d << std::endl;
-
-	std::cout << "UPD Connection\n";
-	sf::IpAddress clientAddress;
-	unsigned short clientPort;
-
-	char ud[128];
-
-	std::size_t received;
-	if (udpSocket.receive(ud, sizeof(ud), received, clientAddress, clientPort) != sf::Socket::Done)
-	{
-		// error...
-		std::cout << "Error receiving from UDP client" << std::endl;
-	}
-
-	std::cout << "Received " << received << " bytes from UDP client: " << ud << std::endl;
-
-	sf::Packet upacket;
-
-	upacket << "WELCOME THROUGH UDP";
-
-	if (udpSocket.send(upacket, clientAddress, clientPort) != sf::Socket::Done) {
-		std::cout << "Error sending to UDP client" << std::endl;
-	}
-
-	std::cout << "Send to UDP Client" << std::endl;*/
-
 	while (window.isOpen()) {
 		//Get the time since the last frame in milliseconds
 		float dt = clock.restart().asSeconds() * gameSpeed;
 
 		timer += dt;
-
-		//serverHandlr->handleGameLogic();
 
 		//This function will allow for new clients to connect.
 		serverHandlr->handleConnections();

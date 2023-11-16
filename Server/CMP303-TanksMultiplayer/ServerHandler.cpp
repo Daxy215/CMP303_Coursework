@@ -205,10 +205,9 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 
 	if (data._Equal("Moved")) {
 		int id;
-		float x, y;
+		float x, y, r;
 
-		packet >> id;
-		packet >> x >> y;
+		packet >> id >> x >> y >> r;
 
 		if (client.id != id) {
 			return;
@@ -218,12 +217,16 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 		client.player->y = y;
 
 		client.player->tank->setPosition(x, y);
+		client.player->tank->m_BarrelSprite.setPosition(x, y);
+
+		client.player->tank->setRotation(r);
+		client.player->tank->m_BarrelSprite.setRotation(r);
 
 		//Send to all other clients that this client has moved.
 		sf::Packet playerMovedPacket;
 
 		playerMovedPacket << "PlayerMoved";
-		playerMovedPacket << x << y;
+		playerMovedPacket << x << y << r;
 		playerMovedPacket << client.id;
 
 		sendDataUDPToAllClientsExpect(playerMovedPacket, client.id);
@@ -231,8 +234,7 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 }
 
 void ServerHandler::disconnectClient(Client* client) {
-	
-
+	//TODO; Remove tank from vector
 
 	selector.remove((*client->tcpSocket));
 

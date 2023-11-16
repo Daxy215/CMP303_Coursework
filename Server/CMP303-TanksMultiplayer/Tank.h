@@ -24,9 +24,10 @@ public:
 	//void setPosition( float x, float y );
 	void setGhostPosition( sf::Vector2f pos );
 	void Reset();
+public:
+	sf::Sprite	m_BarrelSprite;
 
 private:
-	sf::Sprite	m_BarrelSprite;
 	sf::Sprite	m_GhostSprite;
 
 	sf::Texture m_BodyTexture;
