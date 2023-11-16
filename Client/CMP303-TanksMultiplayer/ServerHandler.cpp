@@ -124,6 +124,8 @@ void ServerHandler::handleUDPData(sf::Packet packet) {
 
 		if (tank != nullptr) {
 			tank->setPosition(x, y);
+			tank->m_BarrelSprite.setPosition(x, y);
+
 			tank->setRotation(r);
 			tank->m_BarrelSprite.setRotation(r);
 		}

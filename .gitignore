@@ -19,3 +19,12 @@ Client/.vs/Client/v17/.suo
 *.tlog
 *.ilk
 *.db
+*.pdb
+*.ilk
+*.log
+*.obj
+*.idb
+Server/CMP303-TanksMultiplayer/x64/Debug/ServerHandler.obj
+Server/CMP303-TanksMultiplayer/x64/Debug/vc143.idb
+Server/CMP303-TanksMultiplayer/x64/Debug/CMP303-TanksMultiplayer.log
+Server/CMP303-TanksMultiplayer/x64/Debug/CMP303-TanksMultiplayer.ilk

@@ -3,7 +3,6 @@
 #include <iostream>
 
 //TODO: Make player send name.
-//TODO; Send UDP server from client like the port..
 
 ServerHandler::ServerHandler(std::vector<Tank*>& tanks, std::string serverAddress, unsigned short port) : tanks(tanks) {
 	this->serverAddress = serverAddress;
