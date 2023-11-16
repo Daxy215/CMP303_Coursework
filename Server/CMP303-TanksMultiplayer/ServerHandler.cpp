@@ -31,7 +31,7 @@ void ServerHandler::connect() {
 	std::cout << "Server TCP/UDP started listening on; " << port << std::endl;
 
 	listener.setBlocking(false);
-	udpSocket->setBlocking(false);
+	//udpSocket->setBlocking(false);
 
 	selector.add(listener);
 	selector.add(*udpSocket);
@@ -53,7 +53,7 @@ void ServerHandler::handleConnections() {
 			Tank* tank = new Tank("blue");
 			client->player->tank = tank;
 
-			tanks.push_back(tank);
+			tanks.push_back(client->player->tank);
 
 			sf::Packet welcomePacket;
 			welcomePacket << "Welcome";
@@ -236,6 +236,11 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 void ServerHandler::disconnectClient(Client* client) {
 	//TODO; Remove tank from vector
 
+	auto it = std::find(tanks.begin(), tanks.end(), client->player->tank);
+	if (it != tanks.end()) {
+		tanks.erase(it);
+	}
+	
 	selector.remove((*client->tcpSocket));
 
 	client->tcpSocket->disconnect();
@@ -326,7 +331,7 @@ void ServerHandler::sendDataUDP(Client& client, sf::Packet packet) {
 	sf::Socket::Status status = (*udpSocket).send(packet, client.address, client.port);
 
 	if (status != sf::Socket::Done) {
-		std::cout << "ERROR: Failed to send data to client!" << std::endl;
+		std::cout << "ERROR: Failed to send data to client; " << status << std::endl;
 	}
 
 	//std::cout << "Sent; " << status << " - " << client.port << std::endl;
