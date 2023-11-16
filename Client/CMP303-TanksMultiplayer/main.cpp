@@ -13,6 +13,8 @@
 
 bool isFocused = true;
 
+float countDownTimer;
+
 ServerHandler* serverHandler;
 std::vector<Tank*> tanks;
 
@@ -70,6 +72,16 @@ int main() {
 
 		serverHandler->handleConnections();
 
+		if (serverHandler->startCountdown)
+			countDownTimer += dt;
+
+		if (countDownTimer >= serverHandler->maxCountdownTime) {
+			serverHandler->startCountdown = false;
+
+			//Start game
+
+		}
+
 		sf::Event event;
 		while (window.pollEvent(event))	{
 			if (event.type == sf::Event::GainedFocus)
@@ -82,7 +94,8 @@ int main() {
 				window.close();
 			if (event.type == sf::Event::KeyPressed && isFocused) {
 				//Update player input
-				tanks[0]->UpdateInput(dt, event.key.code);
+				if(!serverHandler->startCountdown)
+					tanks[0]->UpdateInput(dt, event.key.code);
 
 				if (event.key.code == sf::Keyboard::Key::Escape)
 					window.close();
@@ -99,14 +112,18 @@ int main() {
 			}
 		}
 		
-		std::string ids = "\n";
+		if (!serverHandler->startCountdown) {
+			std::string ids = "\n";
 
-		for (auto& tank : tanks) {
-			ids += std::to_string(tank->m_id);
-			ids += "\n";
+			for (auto& tank : tanks) {
+				ids += std::to_string(tank->m_id);
+				ids += "\n";
+			}
+
+			debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
+		} else {
+			debugText.setString("Time left: " + Stringify(serverHandler->maxCountdownTime - countDownTimer));
 		}
-
-		debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
 
 		//Render the scene
 		window.clear();

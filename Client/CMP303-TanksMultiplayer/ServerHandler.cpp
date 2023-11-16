@@ -104,6 +104,9 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 
 		packet >> countdown;
 
+		maxCountdownTime = countdown;
+		startCountdown = true;
+
 		std::cout << "AYOOO STARTED; " << countdown << std::endl;
 	}
 }
