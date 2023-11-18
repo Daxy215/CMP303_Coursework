@@ -28,3 +28,11 @@ Server/CMP303-TanksMultiplayer/x64/Debug/ServerHandler.obj
 Server/CMP303-TanksMultiplayer/x64/Debug/vc143.idb
 Server/CMP303-TanksMultiplayer/x64/Debug/CMP303-TanksMultiplayer.log
 Server/CMP303-TanksMultiplayer/x64/Debug/CMP303-TanksMultiplayer.ilk
+Client/.vs/Client/v17/.suo
+*.db
+*.ipch
+*.ipch
+Client/.vs/Client/v17/ipch/AutoPCH/92734ef3d9a5d348/MAIN.ipch
+Client/.vs/Client/v17/Browse.VC.db-shm
+Client/.vs/Client/v17/Browse.VC.db
+Client/.vs/Client/v17/.suo

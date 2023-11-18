@@ -50,8 +50,6 @@ void ServerHandler::handleConnections() {
 			if (packetTCP != nullptr) {
 				handleTCPData(packetTCP);
 			}
-
-			//std::cout << "Received data ;} " << std::endl;
 		}
 		
 		if (selector.isReady(udpSocket)) {
@@ -109,6 +107,14 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 
 		std::cout << "AYOOO STARTED; " << countdown << std::endl;
 	}
+
+	if(data._Equal("StartGame")) {
+		float x, y;
+		packet >> x >> y;
+		
+		tanks[0]->setPosition(x, y);
+		tanks[0]->m_BarrelSprite.setPosition(x, y);
+	}
 }
 
 void ServerHandler::handleUDPData(sf::Packet packet) {
@@ -133,6 +139,10 @@ void ServerHandler::handleUDPData(sf::Packet packet) {
 			tank->m_BarrelSprite.setRotation(r);
 		}
 	}
+
+	if(data._Equal("CountdownTimer")) {
+		packet >> countdownTimer;
+	}
 }
 
 void ServerHandler::sendDataTCP(sf::TcpSocket& tcpSocket, sf::Packet packet) {
@@ -141,8 +151,6 @@ void ServerHandler::sendDataTCP(sf::TcpSocket& tcpSocket, sf::Packet packet) {
 	if (status != sf::Socket::Done) {
 		std::cout << "ERROR: Failed to send data to server!" << std::endl;
 	}
-	
-	//std::cout << "sent TCP " << status << std::endl;
 }
 
 sf::Packet ServerHandler::receiveDataTCP(sf::TcpSocket& tcpSocket) {
@@ -167,8 +175,6 @@ void ServerHandler::sendDataUDP(sf::UdpSocket& udpSocket, sf::Packet packet) {
 	if (status != sf::Socket::Done) {
 		std::cout << "ERROR: Failed to send data to server!" << std::endl;
 	}
-
-	//std::cout << "sent UDP " << status << " / " << port << std::endl;
 }
 
 sf::Packet ServerHandler::recieveDataUDP(sf::UdpSocket& udpSocket) {
@@ -184,8 +190,6 @@ sf::Packet ServerHandler::recieveDataUDP(sf::UdpSocket& udpSocket) {
 
 			return packet;
 		}
-
-		//std::cout << "Recieved from; " << serverAddress << " - " << port << std::endl;
 
 		return packet;
 	}

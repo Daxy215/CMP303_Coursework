@@ -12,6 +12,17 @@ ServerHandler::ServerHandler(std::vector<Tank*>& tanks, std::string serverAddres
 
 	this->gen = gens;
 	distribution(gen, 1000);
+
+	float x = 640;
+	float y = 480;
+
+	float paddingX = 128;
+	float paddingY = 128;
+
+	locations.push_back(new Vector2(paddingX, paddingY));
+	locations.push_back(new Vector2(paddingX, y - paddingY));
+	locations.push_back(new Vector2(x - paddingX, paddingY));
+	locations.push_back(new Vector2(x - paddingX, y - paddingY));
 }
 
 void ServerHandler::connect() {
@@ -51,37 +62,29 @@ void ServerHandler::handleConnections() {
 
 			Tank* tank = new Tank("blue");
 			client->player->tank = tank;
+			//client->player->tank->setPosition(locations[2]->x, locations[2]->y);
 
 			tanks.push_back(client->player->tank);
 
 			sf::Packet welcomePacket;
 			welcomePacket << "Welcome";
 			welcomePacket << client->id;
-
+			
 			sendDataTCP(*client->tcpSocket, welcomePacket);
-
+			
 			//No need to notify others.. if there aren't any
-			if (clients.size() > 1) {
-				sf::Packet packet;
-
-				packet << "PlayerJoined";
-				packet << client->player->x << client->player->y;
-				packet << client->id;
-
-				//Send to all other players that this new client has joined
-				sendDataTCPToAllClientsExpect(packet, client->id);
-
+			if(clients.size() > 1) {
 				//Send to this new client, the previous players
 				for (auto& nclient : clients) {
 					if (nclient->id == client->id)
 						continue;
-
+					
 					sf::Packet joinedPacket;
-
+					
 					joinedPacket << "PlayerJoined";
 					joinedPacket << nclient->player->x << nclient->player->y;
 					joinedPacket << nclient->id;
-					
+				
 					sendDataTCP(*client->tcpSocket, joinedPacket);
 				}
 			}
@@ -128,7 +131,7 @@ sf::TcpSocket* ServerHandler::handleTCP() {
 }
 
 void ServerHandler::handleGameLogic() {
-	if (gameStarted || clients.empty() /*If clients == minStartPlayers*/) {
+	if (gameStarted || clients.empty() || clients.size() != MAX_PLAYERS) {
 		return;
 	}
 
@@ -148,8 +151,10 @@ void ServerHandler::handleGameLogic() {
 	sf::Packet packet;
 
 	packet << "GameStarted";
-	packet << 3; //Game countdown till start
+	packet << MAXCOUNTDOWNTIME; //Game countdown till start
 
+	startCountdown = true;
+	
 	sendDataTCPToAllClients(packet);
 }
 
@@ -170,8 +175,23 @@ void ServerHandler::handleTCPData(sf::Packet packet, Client& client) {
 
 		client.address = address;
 		client.port = port;
+		
 		client.player->x = x;
 		client.player->y = y;
+		client.player->tank->setPosition(x, y);
+		client.player->tank->m_BarrelSprite.setPosition(x, y);
+
+		//No need to notify others.. if there aren't any
+		if (clients.size() > 1) {
+			sf::Packet packet;
+				
+			packet << "PlayerJoined";
+			packet << client.player->x << client.player->y;
+			packet << client.id;
+				
+			//Send to all other players that this new client has joined
+			sendDataTCPToAllClientsExpect(packet, client.id);
+		}
 	}
 	
 	if (data._Equal("Ready")) {
@@ -190,9 +210,9 @@ void ServerHandler::handleTCPData(sf::Packet packet, Client& client) {
 
 		isReadyPacket << "IsReady";
 		isReadyPacket << client.player->isReady;
-
+		
 		sendDataTCP(*client.tcpSocket, isReadyPacket);
-
+		
 		handleGameLogic();
 	}
 }

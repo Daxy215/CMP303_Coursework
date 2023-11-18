@@ -13,8 +13,6 @@
 
 bool isFocused = true;
 
-float countDownTimer;
-
 ServerHandler* serverHandler;
 std::vector<Tank*> tanks;
 
@@ -67,19 +65,15 @@ int main() {
 	while (window.isOpen()) {
 		//Get the time since the last frame in milliseconds
   		float dt = clock.restart().asSeconds() * gameSpeed;
-
+		
 		timer += dt;
-
+		
 		serverHandler->handleConnections();
-
-		if (serverHandler->startCountdown)
-			countDownTimer += dt;
-
-		if (countDownTimer >= serverHandler->maxCountdownTime) {
+		
+		if (serverHandler->countdownTimer >= serverHandler->maxCountdownTime) {
 			serverHandler->startCountdown = false;
-
-			//Start game
-
+			
+			//Wait for server to send packet
 		}
 
 		sf::Event event;
@@ -100,7 +94,7 @@ int main() {
 				if (event.key.code == sf::Keyboard::Key::Escape)
 					window.close();
 				if( event.key.code == sf::Keyboard::Key::R ) {
-					std::cout << "\n--------READY--------\n";
+					std::cout << "--------READY--------\n";
 
 					sf::Packet packet;
 
@@ -122,7 +116,7 @@ int main() {
 
 			debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
 		} else {
-			debugText.setString("Time left: " + Stringify(serverHandler->maxCountdownTime - countDownTimer));
+			debugText.setString("Time left: " + Stringify(serverHandler->maxCountdownTime - serverHandler->countdownTimer));
 		}
 
 		//Render the scene

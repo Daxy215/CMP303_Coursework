@@ -9,7 +9,8 @@
 
 #include "Tank.h"
 
-#define MAX_PLAYERS 2
+#define MAX_PLAYERS 4
+#define MAXCOUNTDOWNTIME 3
 
 struct Player {
 public:
@@ -64,6 +65,13 @@ public:
 	sf::Socket::Status status;
 };
 
+struct Vector2 {
+	Vector2(float x, float y) : x(x), y(y) {}
+
+public:
+	float x, y;
+};
+
 class ServerHandler
 {
 public:
@@ -91,6 +99,10 @@ public:
 	Packet recieveDataUDP(Client& client);
 
 public:
+	float countdownTimer;
+	bool startCountdown;	
+	
+public:
 	std::string serverAddress;
 	unsigned short port;
 
@@ -101,6 +113,7 @@ public:
 	
 	std::vector<Client*> clients;
 	std::vector<Tank*>& tanks;
+	std::vector<Vector2*> locations;
 
 public: //Random variables
 	std::random_device rd;

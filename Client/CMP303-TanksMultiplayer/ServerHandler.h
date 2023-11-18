@@ -23,8 +23,9 @@ public:
 	sf::Packet recieveDataUDP(sf::UdpSocket& udpSocket);
 
 public:
-	int maxCountdownTime;
-	bool startCountdown = false;
+	float maxCountdownTime, countdownTimer;
+	bool startCountdown;
+	bool gameStarted;
 
 	Tank* getTank(int id);
 

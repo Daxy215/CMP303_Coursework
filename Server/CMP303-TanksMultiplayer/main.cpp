@@ -12,7 +12,7 @@
 #define ADDRESS "localhost"
 #define PORT 54000
 
-ServerHandler* serverHandlr;
+ServerHandler* serverHandler;
 std::vector<Tank*> tanks;
 
 //Rounds a float to two decimal places and turns it into a string
@@ -54,8 +54,8 @@ int main() {
 	float timer = 0.0f;
 
 	//Connect to server
-	serverHandlr = new ServerHandler(tanks, ADDRESS, PORT);
-	serverHandlr->connect();
+	serverHandler = new ServerHandler(tanks, ADDRESS, PORT);
+	serverHandler->connect();
 
 	while (window.isOpen()) {
 		//Get the time since the last frame in milliseconds
@@ -64,7 +64,55 @@ int main() {
 		timer += dt;
 
 		//This function will allow for new clients to connect.
-		serverHandlr->handleConnections();
+		serverHandler->handleConnections();
+
+		if(serverHandler->startCountdown) {
+			serverHandler->countdownTimer += dt;
+
+			sf::Packet packet;
+			packet << "CountdownTimer";
+			packet << serverHandler->countdownTimer;
+
+			serverHandler->sendDataUDPToAllClients(packet);
+		}
+		
+		if(serverHandler->countdownTimer >= MAXCOUNTDOWNTIME && serverHandler->startCountdown) {
+			serverHandler->startCountdown = false;
+			
+			//Start game
+			std::cout << "STARTING" << std::endl;
+			int i = 0;
+			for (auto& client : serverHandler->clients) {
+				float x = serverHandler->locations[i]->x;
+				float y = serverHandler->locations[i]->y;
+
+				sf::Packet startGamePacket;
+				startGamePacket << "StartGame";
+				startGamePacket << x << y;
+
+				client->player->x = x;
+				client->player->y = y;
+
+				client->player->tank->setPosition(x, y);
+				client->player->tank->m_BarrelSprite.setPosition(x, y);
+				
+				sf::Socket::Status status = (*client->tcpSocket).send(startGamePacket);
+
+				sf::Packet playerMovedPacket;
+
+				playerMovedPacket << "PlayerMoved";
+				playerMovedPacket << x << y << client->player->tank->getRotation();
+				playerMovedPacket << client->id;
+
+				serverHandler->sendDataUDPToAllClientsExpect(playerMovedPacket, client->id);
+				
+				if (status != sf::Socket::Done) {
+					std::cout << "ERROR: Failed to send data to client!" << std::endl;
+				}
+
+				i++;
+			}
+		}
 
 		sf::Event event;
 		while (window.pollEvent(event))	{
@@ -75,36 +123,32 @@ int main() {
 					window.close();
 			}
 		}
-
-		//if (timer >= 8 && timer <= 8.02) {
-		//	std::cout << "Sending.." << std::endl;
-		//	sf::Packet packet;
-
-		//	packet << "AYOOOOOOOOOOOO WELCOME GUYS";
-
-		//	serverHandlr->sendDataTCPToAllClients(packet);
-		//}
 		
-		std::string ids = "\n";
+		if(!serverHandler->startCountdown) {
+			std::string ids = "\n";
 
-		for (auto& client : serverHandlr->clients) {
-			ids += std::to_string(client->id);
-			ids += "\n";
+			for (auto& client : serverHandler->clients) {
+				ids += std::to_string(client->id) + " - ";
+				ids += std::to_string(client->player->isReady);
+				ids += "\n";
+			}
+			
+			debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
+		} else {
+			debugText.setString("Time left: " + Stringify(MAXCOUNTDOWNTIME - serverHandler->countdownTimer));
 		}
-
-		debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
-
+		
 		//Render the scene
 		window.clear();
 		window.draw(floor);
-
+		
 		for (auto& tank : tanks) {
 			tank->Render(&window);
 		}
-
+		
 		window.draw(debugText);
 		window.display();
 	}
-
+	
 	return 0;
 }
