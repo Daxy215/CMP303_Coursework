@@ -10,6 +10,7 @@
 
 #define ADDRESS "localhost"
 #define PORT 54000
+#define MAXPLAYERS 4
 
 bool isFocused = true;
 
@@ -70,11 +71,11 @@ int main() {
 		
 		serverHandler->handleConnections();
 		
-		if (serverHandler->countdownTimer >= serverHandler->maxCountdownTime) {
-			serverHandler->startCountdown = false;
+		//if (serverHandler->countdownTimer >= serverHandler->maxCountdownTime) {
+		//	serverHandler->startCountdown = false;
 			
 			//Wait for server to send packet
-		}
+		//}
 
 		sf::Event event;
 		while (window.pollEvent(event))	{
@@ -106,7 +107,7 @@ int main() {
 			}
 		}
 		
-		if (!serverHandler->startCountdown) {
+		if(serverHandler->gameStarted) {
 			std::string ids = "\n";
 
 			for (auto& tank : tanks) {
@@ -115,10 +116,15 @@ int main() {
 			}
 
 			debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
+		} else if (!serverHandler->startCountdown) {
+			if(tanks.size() < MAXPLAYERS)
+				debugText.setString("Waiting for players!");
+			else
+				debugText.setString("All players are in! Press 'R' to ready up!");
 		} else {
-			debugText.setString("Time left: " + Stringify(serverHandler->maxCountdownTime - serverHandler->countdownTimer));
+			debugText.setString("Wait until battle starts!");
 		}
-
+		
 		//Render the scene
 		window.clear();
 		window.draw(floor);

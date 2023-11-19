@@ -68,12 +68,6 @@ int main() {
 
 		if(serverHandler->startCountdown) {
 			serverHandler->countdownTimer += dt;
-
-			sf::Packet packet;
-			packet << "CountdownTimer";
-			packet << serverHandler->countdownTimer;
-
-			serverHandler->sendDataUDPToAllClients(packet);
 		}
 		
 		if(serverHandler->countdownTimer >= MAXCOUNTDOWNTIME && serverHandler->startCountdown) {

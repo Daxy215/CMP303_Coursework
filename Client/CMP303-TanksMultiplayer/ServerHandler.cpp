@@ -102,13 +102,16 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 
 		packet >> countdown;
 
-		maxCountdownTime = countdown;
+		//maxCountdownTime = countdown;
 		startCountdown = true;
 
 		std::cout << "AYOOO STARTED; " << countdown << std::endl;
 	}
 
 	if(data._Equal("StartGame")) {
+		gameStarted = true;
+		startCountdown = false;
+		
 		float x, y;
 		packet >> x >> y;
 		
@@ -138,10 +141,6 @@ void ServerHandler::handleUDPData(sf::Packet packet) {
 			tank->setRotation(r);
 			tank->m_BarrelSprite.setRotation(r);
 		}
-	}
-
-	if(data._Equal("CountdownTimer")) {
-		packet >> countdownTimer;
 	}
 }
 
