@@ -48,71 +48,72 @@ void ServerHandler::connect() {
 }
 
 void ServerHandler::handleConnections() {
-	if (selector.wait(sf::milliseconds(1))) {
-		if (selector.isReady(listener)) {
-			sf::TcpSocket* tcpSocket = handleTCP();
+	while(true) {
+		if (selector.wait(sf::milliseconds(1))) {
+			if (selector.isReady(listener)) {
+				sf::TcpSocket* tcpSocket = handleTCP();
 
-			tcpSocket->setBlocking(false);
-			selector.add(*tcpSocket);
+				tcpSocket->setBlocking(false);
+				selector.add(*tcpSocket);
 
-			Client* client = new Client(distribution(gen), new Player(), tcpSocket);
-			clients.push_back(client);
+				Client* client = new Client(distribution(gen), new Player(), tcpSocket);
+				clients.push_back(client);
 
-			std::cout << "New client connected! " << client->id << std::endl;
+				std::cout << "New client connected! " << client->id << std::endl;
 
-			Tank* tank = new Tank("blue");
-			client->player->tank = tank;
-			//client->player->tank->setPosition(locations[2]->x, locations[2]->y);
+				Tank* tank = new Tank("blue");
+				client->player->tank = tank;
 
-			tanks.push_back(client->player->tank);
+				tanks.push_back(client->player->tank);
 
-			sf::Packet welcomePacket;
-			welcomePacket << "Welcome";
-			welcomePacket << client->id;
+				sf::Packet welcomePacket;
+				welcomePacket << "Welcome";
+				welcomePacket << client->id;
 			
-			sendDataTCP(*client->tcpSocket, welcomePacket);
+				sendDataTCP(*client->tcpSocket, welcomePacket);
 			
-			//No need to notify others.. if there aren't any
-			if(clients.size() > 1) {
-				//Send to this new client, the previous players
-				for (auto& nclient : clients) {
-					if (nclient->id == client->id)
+				//No need to notify others.. if there aren't any
+				if(clients.size() > 1) {
+					//Send to this new client, the previous players
+					for (auto& nclient : clients) {
+						if (nclient->id == client->id)
+							continue;
+					
+						sf::Packet joinedPacket;
+					
+						joinedPacket << "PlayerJoined";
+						joinedPacket << nclient->player->x << nclient->player->y;
+						joinedPacket << nclient->id;
+				
+						sendDataTCP(*client->tcpSocket, joinedPacket);
+					}
+				}
+			} else {
+				for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end();) {
+					Client& client = **it;
+
+					//TCP Handling
+					Packet packetTCP = receiveDataTCP(*client.tcpSocket);
+				
+					//Check for connection
+					if (packetTCP.status == sf::Socket::Disconnected) {
+						std::cout << "Player disconnected" << std::endl;
+					
+						disconnectClient(&client);
+						it = clients.erase(it);
+					
 						continue;
-					
-					sf::Packet joinedPacket;
-					
-					joinedPacket << "PlayerJoined";
-					joinedPacket << nclient->player->x << nclient->player->y;
-					joinedPacket << nclient->id;
-				
-					sendDataTCP(*client->tcpSocket, joinedPacket);
+					}
+
+					//UDP Handling
+					Packet packetUDP = recieveDataUDP(client);
+
+					//Handle TCP/UDP data.
+					handleTCPData(packetTCP.packet, client);
+					handleUDPData(packetUDP.packet, client);
+
+					it++;
 				}
-			}
-		} else {
-			for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end();) {
-				Client& client = **it;
-
-				//TCP Handling
-				Packet packetTCP = receiveDataTCP(*client.tcpSocket);
-				
-				//Check for connection
-				if (packetTCP.status == sf::Socket::Disconnected) {
-					std::cout << "Player disconnected" << std::endl;
-					
-					disconnectClient(&client);
-					it = clients.erase(it);
-					
-					continue;
-				}
-
-				//UDP Handling
-				Packet packetUDP = recieveDataUDP(client);
-
-				//Handle TCP/UDP data.
-				handleTCPData(packetTCP.packet, client);
-				handleUDPData(packetUDP.packet, client);
-
-				it++;
 			}
 		}
 	}

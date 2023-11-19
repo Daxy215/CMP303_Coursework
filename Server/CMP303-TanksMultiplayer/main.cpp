@@ -2,6 +2,7 @@
 #include <SFML\Graphics.hpp>
 #include <sstream>
 #include <iomanip>
+#include <thread>
 
 #include <iostream>
 #include <string>
@@ -22,6 +23,19 @@ std::string Stringify( float value ) {
 	std::string t;
 	sStream >> t;
 	return t;
+}
+
+void handleCollisions() {
+	for(auto& client0 : serverHandler->clients) {
+		for(auto& client1 : serverHandler->clients) {
+			sf::FloatRect bounds1 = client0->player->tank->getGlobalBounds();
+			sf::FloatRect bounds2 = client1->player->tank->getGlobalBounds();
+
+			if (bounds1.intersects(bounds2)) {
+				
+			}
+		}
+	}
 }
 
 int main() {
@@ -56,16 +70,20 @@ int main() {
 	//Connect to server
 	serverHandler = new ServerHandler(tanks, ADDRESS, PORT);
 	serverHandler->connect();
+	
+	//This function will allow for new clients to connect.
+	auto handlerFunc = [serverHandler = std::move(serverHandler)]() mutable {
+		serverHandler->handleConnections();
+	};
+
+	std::thread workerThread(handlerFunc);
 
 	while (window.isOpen()) {
 		//Get the time since the last frame in milliseconds
 		float dt = clock.restart().asSeconds() * gameSpeed;
 
 		timer += dt;
-
-		//This function will allow for new clients to connect.
-		serverHandler->handleConnections();
-
+		
 		if(serverHandler->startCountdown) {
 			serverHandler->countdownTimer += dt;
 		}
@@ -103,7 +121,7 @@ int main() {
 				if (status != sf::Socket::Done) {
 					std::cout << "ERROR: Failed to send data to client!" << std::endl;
 				}
-
+				
 				i++;
 			}
 		}
@@ -143,6 +161,8 @@ int main() {
 		window.draw(debugText);
 		window.display();
 	}
+
+	workerThread.join();
 	
 	return 0;
 }
