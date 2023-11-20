@@ -122,6 +122,7 @@ int main() {
 				startGamePacket << x << y;
 				
 				client->player->setPosition(x, y);
+				client->player->tank->setGhostPosition(sf::Vector2f(x, y));
 				
 				sf::Socket::Status status = (*client->tcpSocket).send(startGamePacket);
 

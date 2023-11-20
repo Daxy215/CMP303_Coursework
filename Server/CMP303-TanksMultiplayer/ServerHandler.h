@@ -139,13 +139,13 @@ public:
 
 	void connect();
 	void handleConnections();
-	sf::TcpSocket* handleTCP();
-
+	
 	void handleGameLogic();
 
 	void handleTCPData(sf::Packet packet, Client& client);
 	void handleUDPData(sf::Packet packet, Client& client);
 
+	sf::TcpSocket* handleTCPConnection();
 	void disconnectClient(Client* client);
 
 	void sendDataTCPToAllClients(sf::Packet packet);

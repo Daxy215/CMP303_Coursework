@@ -51,7 +51,7 @@ void ServerHandler::handleConnections() {
 	while(true) {
 		if (selector.wait(sf::milliseconds(1))) {
 			if (selector.isReady(listener)) {
-				sf::TcpSocket* tcpSocket = handleTCP();
+				sf::TcpSocket* tcpSocket = handleTCPConnection();
 
 				tcpSocket->setBlocking(false);
 				selector.add(*tcpSocket);
@@ -109,18 +109,6 @@ void ServerHandler::handleConnections() {
 			}
 		}
 	}
-}
-
-sf::TcpSocket* ServerHandler::handleTCP() {
-	sf::TcpSocket* client = new sf::TcpSocket;
-
-	if (listener.accept(*client) != sf::Socket::Done) {
-		delete client;
-
-		return nullptr;
-	}
-
-	return client;
 }
 
 void ServerHandler::handleGameLogic() {
@@ -242,6 +230,18 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 
 		sendDataUDPToAllClientsExpect(playerMovedPacket, client.id);
 	}
+}
+
+sf::TcpSocket* ServerHandler::handleTCPConnection() {
+	sf::TcpSocket* client = new sf::TcpSocket;
+
+	if (listener.accept(*client) != sf::Socket::Done) {
+		delete client;
+
+		return nullptr;
+	}
+
+	return client;
 }
 
 void ServerHandler::disconnectClient(Client* client) {
