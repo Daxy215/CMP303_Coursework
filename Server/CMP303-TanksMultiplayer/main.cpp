@@ -1,3 +1,12 @@
+/**
+ * Student name: Hussein Al Khayyat
+ * Student number: 2104005
+ *
+ * Simple 2D Tank Multiplayer,
+ * for up to 4 players with,
+ * real time predication / interpolation.
+ */
+
 #include <SFML/Network.hpp>
 #include <SFML\Graphics.hpp>
 #include <sstream>
