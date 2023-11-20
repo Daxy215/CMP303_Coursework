@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-//TODO: Make player send name.
-
 ServerHandler::ServerHandler(std::vector<Tank*>& tanks, std::string serverAddress, unsigned short port) : tanks(tanks) {
 	this->serverAddress = serverAddress;
 	this->port = port;
@@ -46,6 +44,8 @@ void ServerHandler::connect() {
 	selector.add(listener);
 	selector.add(*udpSocket);
 }
+
+//TODO; Make UDP & TCP 2 seperate threads.
 
 void ServerHandler::handleConnections() {
 	while(true) {
@@ -91,20 +91,13 @@ void ServerHandler::handleConnections() {
 			} else {
 				for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end();) {
 					Client& client = **it;
-
+					
 					//TCP Handling
-					Packet packetTCP = receiveDataTCP(*client.tcpSocket);
-				
-					//Check for connection
-					if (packetTCP.status == sf::Socket::Disconnected) {
-						std::cout << "Player disconnected" << std::endl;
-					
-						disconnectClient(&client);
-						it = clients.erase(it);
-					
-						continue;
-					}
+					Packet packetTCP = receiveDataTCP(client);
 
+					if(packetTCP.status == sf::Socket::Disconnected)
+						return;
+					
 					//UDP Handling
 					Packet packetUDP = recieveDataUDP(client);
 
@@ -254,12 +247,14 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 }
 
 void ServerHandler::disconnectClient(Client* client) {
-	//TODO; Remove tank from vector
-
 	auto it = std::find(tanks.begin(), tanks.end(), client->player->tank);
-	if (it != tanks.end()) {
+	if (it != tanks.end())
 		tanks.erase(it);
-	}
+
+	auto itc = std::find(clients.begin(), clients.end(), client);
+
+	if(itc != clients.end())
+		clients.erase(itc);
 	
 	selector.remove((*client->tcpSocket));
 
@@ -303,14 +298,20 @@ void ServerHandler::sendDataTCP(sf::TcpSocket& tcpSocket, sf::Packet packet) {
 	}
 }
 
-Packet ServerHandler::receiveDataTCP(sf::TcpSocket& tcpSocket) {
+Packet ServerHandler::receiveDataTCP(Client& client) {
 	sf::Packet packet;
 
-	if (selector.isReady(tcpSocket)) {
-		sf::Socket::Status status = tcpSocket.receive(packet);
+	if (selector.isReady(*client.tcpSocket)) {
+		sf::Socket::Status status = (*client.tcpSocket).receive(packet);
+		
 		if (status != sf::Socket::Done) {
-			std::cout << "ERROR: Reciving TCP packet failed; " << status << std::endl;
-
+			if(status == sf::Socket::Disconnected) {
+				std::cout << "Player disconnected" << std::endl;
+					
+				disconnectClient(&client);
+			} else
+				std::cout << "ERROR: Reciving TCP packet failed; " << status << std::endl;
+		
 			return Packet(status);
 		}
 

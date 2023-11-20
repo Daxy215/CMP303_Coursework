@@ -91,7 +91,7 @@ public:
 	void sendDataTCPToAllClients(sf::Packet packet);
 	void sendDataTCPToAllClientsExpect(sf::Packet packet, int id);
 	void sendDataTCP(sf::TcpSocket& tcpSocket, sf::Packet packet);
-	Packet receiveDataTCP(sf::TcpSocket& tcpSocket);
+	Packet receiveDataTCP(Client& client);
 
 	void sendDataUDPToAllClients(sf::Packet packet);
 	void sendDataUDPToAllClientsExpect(sf::Packet packet, int id);
