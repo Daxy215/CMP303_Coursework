@@ -94,7 +94,7 @@ int main() {
 
 				if (event.key.code == sf::Keyboard::Key::Escape)
 					window.close();
-				if( event.key.code == sf::Keyboard::Key::R ) {
+				if(event.key.code == sf::Keyboard::Key::R && !serverHandler->gameStarted) {
 					std::cout << "--------READY--------\n";
 
 					sf::Packet packet;

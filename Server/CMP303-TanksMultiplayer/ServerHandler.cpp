@@ -125,7 +125,7 @@ sf::TcpSocket* ServerHandler::handleTCP() {
 }
 
 void ServerHandler::handleGameLogic() {
-	if (gameStarted || clients.empty() || clients.size() != MAX_PLAYERS) {
+	if (startGame || clients.empty() || clients.size() != MAX_PLAYERS) {
 		return;
 	}
 
@@ -138,9 +138,9 @@ void ServerHandler::handleGameLogic() {
 		}
 	}
 
-	std::cout << "starting.." << std::endl;
+	startGame = true;
 
-	gameStarted = true;
+	std::cout << "starting.." << std::endl;
 
 	sf::Packet packet;
 
@@ -198,7 +198,7 @@ void ServerHandler::handleTCPData(sf::Packet packet, Client& client) {
 			return;
 		}
 
-		client.player->isReady = !client.player->isReady;
+		client.player->isReady = true;
 
 		sf::Packet isReadyPacket;
 

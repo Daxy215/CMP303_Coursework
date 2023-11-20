@@ -98,9 +98,11 @@ public:
 	void sendDataUDP(Client& client, sf::Packet packet);
 	Packet recieveDataUDP(Client& client);
 
-public:
+public: //Game variables
 	float countdownTimer;
-	bool startCountdown;	
+	bool startCountdown = false;
+	bool startGame = false;
+	bool gameStarted = false;
 	
 public:
 	std::string serverAddress;
@@ -119,7 +121,4 @@ public: //Random variables
 	std::random_device rd;
 	std::mt19937 gen;
 	std::uniform_int_distribution<int> distribution;
-
-public: //Game variables
-	bool gameStarted;
 };

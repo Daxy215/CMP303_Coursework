@@ -63,7 +63,8 @@ void ServerHandler::handleConnections() {
 	}
 }
 
-void ServerHandler::handleTCPData(sf::Packet packet) {
+void ServerHandler::handleTCPData(sf::Packet packet)
+{
 	std::string data;
 
 	packet >> data;
@@ -97,6 +98,18 @@ void ServerHandler::handleTCPData(sf::Packet packet) {
 		packet >> tanks[0]->m_isReady;
 	}
 
+	if(data._Equal("PlayerCollision")) {
+		int id0, id1;
+
+		packet >> id0 >> id1;
+
+		Tank* tank = getTank(id1);
+
+		if(tank != nullptr) {
+			
+		}
+	}
+	
 	if (data._Equal("GameStarted")) {
 		int countdown = 0;
 
