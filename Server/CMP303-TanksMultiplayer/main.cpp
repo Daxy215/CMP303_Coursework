@@ -119,11 +119,7 @@ int main() {
 				startGamePacket << "StartGame";
 				startGamePacket << x << y;
 
-				client->player->x = x;
-				client->player->y = y;
-
-				client->player->tank->setPosition(x, y);
-				client->player->tank->m_BarrelSprite.setPosition(x, y);
+				client->player->setPosition(x, y);
 				
 				sf::Socket::Status status = (*client->tcpSocket).send(startGamePacket);
 

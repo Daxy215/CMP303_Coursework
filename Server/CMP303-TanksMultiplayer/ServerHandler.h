@@ -18,6 +18,19 @@ public:
 		x = 250;
 		y = 250;
 	}
+	
+	void setPosition(float x, float y) {
+		this->x = x;
+		this->y = y;
+
+		tank->setPosition(x, y);
+		tank->m_BarrelSprite.setPosition(x, y);
+	}
+
+	void setRotation(float r) {
+		tank->setRotation(r);
+		tank->m_BarrelSprite.setRotation(r);
+	}
 
 public:
 	Tank* tank;

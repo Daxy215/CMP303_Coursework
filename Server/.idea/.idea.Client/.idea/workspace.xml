@@ -8,22 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a1ecb769-d32c-4918-8fc6-01c683f5e5cc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/ServerHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/ServerHandler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/Tank.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/Tank.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.command.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.read.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.write.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.write.1.tlog" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/CMP303-TanksMultiplayer.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/CMP303-TanksMultiplayer.ilk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/ServerHandler.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/ServerHandler.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/Tank.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/Tank.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/main.obj" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/main.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/vc143.idb" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/vc143.idb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/vc143.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/CMP303-TanksMultiplayer/x64/Debug/vc143.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/x64/Debug/CMP303-TanksMultiplayer.exe" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/x64/Debug/CMP303-TanksMultiplayer.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Client/x64/Debug/CMP303-TanksMultiplayer.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Client/x64/Debug/CMP303-TanksMultiplayer.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMP303-TanksMultiplayer/ServerHandler.h" beforeDir="false" afterPath="$PROJECT_DIR$/CMP303-TanksMultiplayer/ServerHandler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMP303-TanksMultiplayer/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CMP303-TanksMultiplayer/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMP303-TanksMultiplayer/ServerHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CMP303-TanksMultiplayer/ServerHandler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.command.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.command.1.tlog" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.read.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.read.1.tlog" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.write.1.tlog" beforeDir="false" afterPath="$PROJECT_DIR$/CMP303-TanksMultiplayer/x64/Debug/CMP303-T.3910dcde.tlog/CL.write.1.tlog" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMP303-TanksMultiplayer/x64/Debug/CMP303-TanksMultiplayer.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/CMP303-TanksMultiplayer/x64/Debug/CMP303-TanksMultiplayer.ilk" afterDir="false" />
@@ -507,7 +493,7 @@
       <workItem from="1700327499524" duration="2088000" />
       <workItem from="1700355857672" duration="1226000" />
       <workItem from="1700360497017" duration="4775000" />
-      <workItem from="1700449776017" duration="2832000" />
+      <workItem from="1700449776017" duration="3690000" />
     </task>
     <servers />
   </component>

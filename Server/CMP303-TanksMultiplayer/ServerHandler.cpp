@@ -89,23 +89,22 @@ void ServerHandler::handleConnections() {
 					}
 				}
 			} else {
-				for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end();) {
-					Client& client = **it;
+				for (auto& client : clients) {
+					if(client->player->isDead)
+						continue;
 					
 					//TCP Handling
-					Packet packetTCP = receiveDataTCP(client);
+					Packet packetTCP = receiveDataTCP(*client);
 
 					if(packetTCP.status == sf::Socket::Disconnected)
 						return;
 					
 					//UDP Handling
-					Packet packetUDP = recieveDataUDP(client);
+					Packet packetUDP = recieveDataUDP(*client);
 
 					//Handle TCP/UDP data.
-					handleTCPData(packetTCP.packet, client);
-					handleUDPData(packetUDP.packet, client);
-
-					it++;
+					handleTCPData(packetTCP.packet, *client);
+					handleUDPData(packetUDP.packet, *client);
 				}
 			}
 		}
@@ -170,10 +169,7 @@ void ServerHandler::handleTCPData(sf::Packet packet, Client& client) {
 		client.address = address;
 		client.port = port;
 		
-		client.player->x = x;
-		client.player->y = y;
-		client.player->tank->setPosition(x, y);
-		client.player->tank->m_BarrelSprite.setPosition(x, y);
+		client.player->setPosition(x, y);
 
 		//No need to notify others.. if there aren't any
 		if (clients.size() > 1) {
@@ -226,14 +222,8 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 			return;
 		}
 
-		client.player->x = x;
-		client.player->y = y;
-
-		client.player->tank->setPosition(x, y);
-		client.player->tank->m_BarrelSprite.setPosition(x, y);
-
-		client.player->tank->setRotation(r);
-		client.player->tank->m_BarrelSprite.setRotation(r);
+		client.player->setPosition(x, y);
+		client.player->setRotation(r);
 
 		//Send to all other clients that this client has moved.
 		sf::Packet playerMovedPacket;
