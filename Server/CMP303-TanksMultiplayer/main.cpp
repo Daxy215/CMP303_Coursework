@@ -28,30 +28,25 @@ std::string Stringify( float value ) {
 void handleCollisions() {
 	for(auto& client0 : serverHandler->clients) {
 		for(auto& client1 : serverHandler->clients) {
-			sf::FloatRect bounds1 = client0->player->tank->getLocalBounds();
-			sf::FloatRect bound1G = client0->player->tank->getGlobalBounds();
-			sf::FloatRect bounds2 = client1->player->tank->getLocalBounds();
-
-			bounds1.left = client0->player->x;
-			bounds1.top = client0->player->y;
-
-			bounds2.left = client1->player->x;
-			bounds2.top = client1->player->y;
-
+			if(client0->id == client1->id || client0->player->isDead || client1->player->isDead)
+				continue;
+			
+			sf::FloatRect bounds1 = client0->player->tank->getGlobalBounds();
+			sf::FloatRect bounds2 = client1->player->tank->getGlobalBounds();
+			
 			if (bounds1.intersects(bounds2)) {
 				sf::Packet collisionPacket;
-
+				
 				collisionPacket << "PlayerCollision";
 				collisionPacket << client0->id;
 				collisionPacket << client1->id; //<- Should be destroyed.
 
+				client1->player->isDead = true;
+				
 				//Import data, must be sent successfully.
-				//serverHandler->sendDataTCPToAllClients(collisionPacket);
+				serverHandler->sendDataTCPToAllClients(collisionPacket);
 
-				//Remove destroyed client from game
-				//serverHandler->disconnectClient(client1);
-
-				std::cout << "died :(\n";
+				std::cout << "died; " << client1->id << std::endl;
 			}
 		}
 	}

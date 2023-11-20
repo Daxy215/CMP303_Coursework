@@ -36,7 +36,8 @@ public:
 public:
 	int m_id;
 
-	bool m_isReady;
+	bool m_isReady = false;
+	bool m_isDead = false;
 
 	ServerHandler* serverHandler;
 

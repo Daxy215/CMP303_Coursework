@@ -25,6 +25,7 @@ public:
 	float x,  y;
 
 	bool isReady = false;
+	bool isDead = false;
 };
 
 struct Client {

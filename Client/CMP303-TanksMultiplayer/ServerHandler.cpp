@@ -106,7 +106,7 @@ void ServerHandler::handleTCPData(sf::Packet packet)
 		Tank* tank = getTank(id1);
 
 		if(tank != nullptr) {
-			
+			tank->m_isDead = true;
 		}
 	}
 	

@@ -89,7 +89,7 @@ int main() {
 				window.close();
 			if (event.type == sf::Event::KeyPressed && isFocused) {
 				//Update player input
-				if(!serverHandler->startCountdown)
+				if(!serverHandler->startCountdown && !tanks[0]->m_isDead)
 					tanks[0]->UpdateInput(dt, event.key.code);
 
 				if (event.key.code == sf::Keyboard::Key::Escape)
@@ -108,14 +108,20 @@ int main() {
 		}
 		
 		if(serverHandler->gameStarted) {
-			std::string ids = "\n";
+			if(tanks[0]->m_isDead) {
+				debugText.setString("Well.. How can I say this... You basically just died..");
+				
+				debugText.setScale(sf::Vector2f(0.5f, 0.5f));
+			} else {
+				std::string ids = "\n";
 
-			for (auto& tank : tanks) {
-				ids += std::to_string(tank->m_id);
-				ids += "\n";
+				for (auto& tank : tanks) {
+					ids += std::to_string(tank->m_id);
+					ids += "\n";
+				}
+
+				debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
 			}
-
-			debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
 		} else if (!serverHandler->startCountdown) {
 			if(tanks.size() < MAXPLAYERS)
 				debugText.setString("Waiting for players!");
