@@ -1,10 +1,12 @@
 #pragma once
+
 #include <SFML/Network.hpp>
 
 #include <iostream>
 
 #include <string>
 #include <vector>
+#include <deque>
 #include <random>
 
 #include "Tank.h"
@@ -12,17 +14,61 @@
 #define MAX_PLAYERS 4
 #define MAXCOUNTDOWNTIME 3
 
+struct Predication {
+public:
+	Predication() {
+		
+	}
+	
+	Predication(float timeStamp, sf::Vector2f position, sf::Vector2f velocity) {
+		this->timeStamp = timeStamp;
+		this->position = position;
+		this->velocity = velocity;
+	}
+public:
+	float timeStamp;
+	
+	sf::Vector2f position, velocity;
+};
+
 struct Player {
 public:
 	Player() {
 		x = 250;
 		y = 250;
 	}
-	
+
+public: //Interpolation
+	Predication* Interpolate(float dt, float curentTime, sf::Vector2f velocity) {
+		if(predications.size() < 2) {
+			//Not enough data
+			if(!predications.empty())
+				return predications.back();
+		
+			return new Predication(0, sf::Vector2f(0, 0), sf::Vector2f(0, 0));
+		}
+
+		Predication& nextPred = *predications.back();
+		Predication& prevPred = *predications.at(predications.size() - 2);
+
+		float currentTime = nextPred.timeStamp;
+		float prevTime    = prevPred.timeStamp;
+		
+		float alpha = (currentTime - prevTime);
+		Predication* predication = new Predication();
+		predication->position.x = prevPred.position.x + alpha * (nextPred.position.x - prevPred.position.x);
+		predication->position.y = prevPred.position.y + alpha * (nextPred.position.y - prevPred.position.y);
+
+		return predication;
+	}
+
+	std::deque<Predication*> predications;
+
+public: //Setters
 	void setPosition(float x, float y) {
 		this->x = x;
 		this->y = y;
-
+		
 		tank->setPosition(x, y);
 		tank->m_BarrelSprite.setPosition(x, y);
 	}
@@ -31,12 +77,12 @@ public:
 		tank->setRotation(r);
 		tank->m_BarrelSprite.setRotation(r);
 	}
-
+	
 public:
 	Tank* tank;
-
+	
 	float x,  y;
-
+	
 	bool isReady = false;
 	bool isDead = false;
 };
@@ -113,6 +159,8 @@ public:
 	Packet recieveDataUDP(Client& client);
 
 public: //Game variables
+	float deltaTime, currentTime;
+	
 	float countdownTimer;
 	bool startCountdown = false;
 	bool startGame = false;

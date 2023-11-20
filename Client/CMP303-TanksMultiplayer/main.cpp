@@ -66,8 +66,10 @@ int main() {
 	while (window.isOpen()) {
 		//Get the time since the last frame in milliseconds
   		float dt = clock.restart().asSeconds() * gameSpeed;
+		serverHandler->deltaTime = dt;
 		
 		timer += dt;
+		serverHandler->currentTime = timer;
 		
 		serverHandler->handleConnections();
 		

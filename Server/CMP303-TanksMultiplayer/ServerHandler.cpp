@@ -216,21 +216,29 @@ void ServerHandler::handleUDPData(sf::Packet packet, Client& client) {
 		int id;
 		float x, y, r;
 
-		packet >> id >> x >> y >> r;
+		sf::Vector2f velocity;
+
+		packet >> id >> x >> y >> r >> velocity.x >> velocity.y;
 
 		if (client.id != id) {
 			return;
 		}
-
+		
 		client.player->setPosition(x, y);
 		client.player->setRotation(r);
 
+		client.player->predications.push_back(new Predication(currentTime, sf::Vector2f(x, y), velocity));
+		Predication* predication = client.player->Interpolate(deltaTime, currentTime, velocity);
+		client.player->tank->setGhostPosition(predication->position);
+		
 		//Send to all other clients that this client has moved.
 		sf::Packet playerMovedPacket;
 
 		playerMovedPacket << "PlayerMoved";
 		playerMovedPacket << x << y << r;
 		playerMovedPacket << client.id;
+		playerMovedPacket << currentTime;
+		playerMovedPacket << velocity.x << velocity.y;
 
 		sendDataUDPToAllClientsExpect(playerMovedPacket, client.id);
 	}

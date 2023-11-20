@@ -21,8 +21,12 @@ public:
 	sf::Packet receiveDataTCP(sf::TcpSocket& tcpSocket);
 	void sendDataUDP(sf::UdpSocket& udpSocket, sf::Packet packet);
 	sf::Packet recieveDataUDP(sf::UdpSocket& udpSocket);
-
+	
+public: //Interpolation
+	Predication* Interpolate(Tank* tank);
+	
 public:
+	float deltaTime, currentTime;
 	//float maxCountdownTime, countdownTimer;
 	bool startCountdown = false;
 	bool gameStarted = false;

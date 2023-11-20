@@ -95,9 +95,11 @@ int main() {
 	while (window.isOpen()) {
 		//Get the time since the last frame in milliseconds
 		float dt = clock.restart().asSeconds() * gameSpeed;
-
+		serverHandler->deltaTime = dt;
+		
 		timer += dt;
-
+		serverHandler->currentTime = timer;
+		
 		if(serverHandler->gameStarted)
 			handleCollisions();
 		
@@ -114,11 +116,11 @@ int main() {
 			for (auto& client : serverHandler->clients) {
 				float x = serverHandler->locations[i]->x;
 				float y = serverHandler->locations[i]->y;
-
+				
 				sf::Packet startGamePacket;
 				startGamePacket << "StartGame";
 				startGamePacket << x << y;
-
+				
 				client->player->setPosition(x, y);
 				
 				sf::Socket::Status status = (*client->tcpSocket).send(startGamePacket);
@@ -160,7 +162,7 @@ int main() {
 				ids += "\n";
 			}
 			
-			debugText.setString("Game Time: " + Stringify(timer) + " - IDs; " + ids);
+			debugText.setString("Game Time: " + Stringify(serverHandler->currentTime) + " - IDs; " + ids);
 		} else {
 			debugText.setString("Time left: " + Stringify(MAXCOUNTDOWNTIME - serverHandler->countdownTimer));
 		}

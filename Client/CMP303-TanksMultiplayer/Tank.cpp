@@ -23,23 +23,15 @@ Tank::Tank(std::string color, ServerHandler* serverHandler) : sf::Sprite(), serv
 }
 
 
-Tank::~Tank()
-{
-}
-
-//Sets the tank's position to the latest network position
-void Tank::Update(float dt)
-{
-	if (m_Messages.size() < 1)
-		return;
-
-	TankMessage latestMessage = m_Messages.back();
-	setPosition( latestMessage.x, latestMessage.y );
+Tank::~Tank() {
+	
 }
 
 void Tank::UpdateInput(float dt, sf::Keyboard::Key eventType) {
 	if (serverHandler == nullptr)
 		return;
+
+	sf::Vector2f velocity = getPosition();
 
 	if (eventType == sf::Keyboard::Key::W || eventType == sf::Keyboard::Key::Up) {
 		addPosition(0, -(m_speed * dt));
@@ -69,9 +61,11 @@ void Tank::UpdateInput(float dt, sf::Keyboard::Key eventType) {
 		m_BarrelSprite.setRotation(-90);
 	}
 
+	sf::Vector2f difference = velocity - getPosition();
+	
 	sf::Packet packet;
 	packet << "Moved";
-	packet << m_id << getPosition().x << getPosition().y << getRotation();
+	packet << m_id << getPosition().x << getPosition().y << getRotation() << difference.x << difference.y;
 
 	serverHandler->sendDataUDP(serverHandler->udpSocket, packet);
 }
@@ -104,40 +98,4 @@ const void Tank::Render(sf::RenderWindow * window) {
 		window->draw(*this);
 		window->draw(m_BarrelSprite);
 	}
-}
-
-//Add a message to the tank's network message queue
-void Tank::AddMessage(const TankMessage & msg) {
-	m_Messages.push_back(msg);
-}
-
-//This method calculates and stores the position, but also returns it immediately for use in the main loop
-//This is my where prediction would be... IF I HAD ANY
-sf::Vector2f Tank::RunPrediction(float gameTime) {
-	float predictedX = -1.0f;
-	float predictedY = -1.0f;
-
-
-	const int msize = m_Messages.size();
-	if( msize < 3 ) {
-		return sf::Vector2f( predictedX, predictedX );
-	}
-	const TankMessage& msg0 = m_Messages[msize - 1];
-	const TankMessage& msg1 = m_Messages[msize - 2];
-	const TankMessage& msg2 = m_Messages[msize - 3];
-	
-	// FIXME: Implement prediction here!
-	// You have:
-	// - the history of position messages received, in "m_Messages"
-	//   (msg0 is the most recent, msg1 the 2nd most recent, msg2 the 3rd most recent)
-	// - the current time, in "gameTime"
-	//
-	// You need to update:
-	// - the predicted position at the current time, in "predictedX" and "predictedY"
-		
-	return sf::Vector2f( predictedX, predictedY );
-}
-
-void Tank::Reset() {
-	m_Messages.clear();
 }

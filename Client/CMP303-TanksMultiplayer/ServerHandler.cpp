@@ -88,6 +88,7 @@ void ServerHandler::handleTCPData(sf::Packet packet)
 
 		tank->setPosition(x, y);
 		tank->m_id = id;
+		tank->SetRenderMode(Tank::REAL_AND_PREDICTED);
 
 		tanks.push_back(tank);
 
@@ -141,13 +142,29 @@ void ServerHandler::handleUDPData(sf::Packet packet) {
 	if (data._Equal("PlayerMoved")) {
 		float x, y, r;
 		int id;
-
+	
 		packet >> x >> y >> r;
 		packet >> id;
 		
 		Tank* tank = getTank(id);
 
 		if (tank != nullptr) {
+			float givenTime;
+			packet >> givenTime;
+			
+			float prevTime = currentTime;
+			sf::Vector2f velocity;
+
+			packet >> velocity.x >> velocity.y;
+			
+			tank->predications.push_back(new Predication(currentTime, sf::Vector2f(x, y), velocity));
+
+			if(tank->predications.size() > 5)
+				tank->predications.pop_front();
+
+			Predication* predication = Interpolate(tank);
+			tank->setGhostPosition(predication->position);
+			
 			tank->setPosition(x, y);
 			tank->m_BarrelSprite.setPosition(x, y);
 
@@ -207,6 +224,29 @@ sf::Packet ServerHandler::recieveDataUDP(sf::UdpSocket& udpSocket) {
 	}
 
 	return packet;
+}
+
+Predication* ServerHandler::Interpolate(Tank* tank) {
+	if(tank->predications.size() < 2) {
+		//Not enough data
+		if(!tank->predications.empty())
+			return tank->predications.back();
+		
+		return new Predication(0, sf::Vector2f(0, 0), sf::Vector2f(0, 0));
+	}
+
+	Predication& nextPred = *tank->predications.back();
+	Predication& prevPred = *tank->predications.at(tank->predications.size() - 2);
+
+	float currentTime = nextPred.timeStamp;
+	float prevTime    = prevPred.timeStamp;
+
+	float alpha = (currentTime - prevTime);
+	Predication* predication = new Predication();
+	predication->position.x = prevPred.position.x + alpha * (nextPred.position.x - prevPred.position.x);
+	predication->position.y = prevPred.position.y + alpha * (nextPred.position.y - prevPred.position.y);
+
+	return predication;
 }
 
 Tank* ServerHandler::getTank(int id) {
