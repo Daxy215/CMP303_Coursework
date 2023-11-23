@@ -199,7 +199,7 @@ sf::Packet ServerHandler::receiveDataTCP(sf::TcpSocket& tcpSocket) {
 }
 
 void ServerHandler::sendDataUDP(sf::UdpSocket& udpSocket, sf::Packet packet) {
-	sf::Socket::Status status = udpSocket.send(packet, "localhost", 54000);//TODO;
+	sf::Socket::Status status = udpSocket.send(packet, "localhost", 54000);
 
 	if (status != sf::Socket::Done) {
 		std::cout << "ERROR: Failed to send data to server!" << std::endl;
