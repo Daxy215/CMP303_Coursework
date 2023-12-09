@@ -17,6 +17,7 @@ public:
 		this->position = position;
 		this->velocity = velocity;
 	}
+	
 public:
 	float timeStamp;
 	

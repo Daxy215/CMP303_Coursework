@@ -63,8 +63,7 @@ void ServerHandler::handleConnections() {
 	}
 }
 
-void ServerHandler::handleTCPData(sf::Packet packet)
-{
+void ServerHandler::handleTCPData(sf::Packet packet) {
 	std::string data;
 
 	packet >> data;
@@ -147,14 +146,13 @@ void ServerHandler::handleUDPData(sf::Packet packet) {
 		packet >> id;
 		
 		Tank* tank = getTank(id);
-
+		
 		if (tank != nullptr) {
 			float givenTime;
 			packet >> givenTime;
 			
-			float prevTime = currentTime;
 			sf::Vector2f velocity;
-
+			
 			packet >> velocity.x >> velocity.y;
 			
 			tank->predications.push_back(new Predication(currentTime, sf::Vector2f(x, y), velocity));
@@ -232,7 +230,7 @@ Predication* ServerHandler::Interpolate(Tank* tank) {
 		if(!tank->predications.empty())
 			return tank->predications.back();
 		
-		return new Predication(0, sf::Vector2f(0, 0), sf::Vector2f(0, 0));
+		return new Predication(0, {0, 0}, {0, 0});
 	}
 
 	Predication& nextPred = *tank->predications.back();
@@ -245,7 +243,7 @@ Predication* ServerHandler::Interpolate(Tank* tank) {
 	Predication* predication = new Predication();
 	predication->position.x = prevPred.position.x + alpha * (nextPred.position.x - prevPred.position.x);
 	predication->position.y = prevPred.position.y + alpha * (nextPred.position.y - prevPred.position.y);
-
+	
 	return predication;
 }
 

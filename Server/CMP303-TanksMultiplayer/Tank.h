@@ -20,7 +20,6 @@ public:
 	void setGhostPosition( sf::Vector2f pos );
 public:
 	sf::Sprite	m_BarrelSprite;
-	
 	sf::Sprite	m_GhostSprite;
 
 private:

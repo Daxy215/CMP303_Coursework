@@ -45,8 +45,6 @@ void ServerHandler::connect() {
 	selector.add(*udpSocket);
 }
 
-//TODO; Make UDP & TCP 2 seperate threads.
-
 void ServerHandler::handleConnections() {
 	while(true) {
 		if (selector.wait(sf::milliseconds(1))) {
@@ -101,7 +99,7 @@ void ServerHandler::handleConnections() {
 					
 					//UDP Handling
 					Packet packetUDP = recieveDataUDP(*client);
-
+					
 					//Handle TCP/UDP data.
 					handleTCPData(packetTCP.packet, *client);
 					handleUDPData(packetUDP.packet, *client);
@@ -308,7 +306,7 @@ Packet ServerHandler::receiveDataTCP(Client& client) {
 					
 				disconnectClient(&client);
 			} else
-				std::cout << "ERROR: Reciving TCP packet failed; " << status << std::endl;
+				std::cout << "ERROR: Receiving TCP packet failed; " << status << std::endl;
 		
 			return Packet(status);
 		}
